@@ -1,0 +1,38 @@
+# ============================================================
+# Root .htaccess – Porthmadog RFC
+# Rewrite all public-facing URLs through /public/
+# ============================================================
+
+Options -Indexes
+ServerSignature Off
+
+# Security headers (supplement your Apache httpd.conf / virtualhost)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options   "nosniff"
+    Header always set X-Frame-Options          "SAMEORIGIN"
+    Header always set X-XSS-Protection        "1; mode=block"
+    Header always set Referrer-Policy          "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy       "camera=(), microphone=(), geolocation=()"
+    # Content-Security-Policy – tighten further in production
+    Header always set Content-Security-Policy  "default-src 'self'; style-src 'self'; img-src 'self' data:; script-src 'self';"
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Allow direct access to assets and uploads
+    RewriteRule ^assets/     -  [L]
+    RewriteRule ^uploads/    -  [L]
+
+    # Route everything through /public/
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Clean URLs: /players  →  /public/players.php
+    RewriteRule ^/?$               /public/index.php    [L]
+    RewriteRule ^players/?$        /public/players.php  [L]
+    RewriteRule ^player/?$         /public/player.php   [QSA,L]
+    RewriteRule ^fixtures/?$       /public/fixtures.php [L]
+    RewriteRule ^results/?$        /public/results.php  [L]
+    RewriteRule ^history/?$        /public/history.php  [L]
+</IfModule>
