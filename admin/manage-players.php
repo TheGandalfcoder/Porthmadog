@@ -110,7 +110,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
              VALUES (?, ?, ?, ?, ?, ?)'
         );
         $stmt->execute([$name, $position, $squadNum, $age, $bio, $photoPath]);
+        $playerId = (int)$db->lastInsertId();
         setFlash('success', 'Player added.');
+    }
+
+    // ── Upsert season stats ────────────────────────────────────────────────
+    $statsSeason  = cleanString($_POST['stats_season']  ?? '');
+    $statsTries   = cleanInt($_POST['stats_tries']      ?? 0);
+    $statsAssists = cleanInt($_POST['stats_assists']    ?? 0);
+    $statsMotm    = cleanInt($_POST['stats_motm']       ?? 0);
+
+    if ($statsSeason !== '' && $playerId > 0) {
+        try {
+            $db->prepare(
+                'INSERT INTO player_stats (player_id, season, tries, assists, motm_count)
+                 VALUES (?,?,?,?,?)
+                 ON DUPLICATE KEY UPDATE tries=VALUES(tries), assists=VALUES(assists), motm_count=VALUES(motm_count)'
+            )->execute([$playerId, $statsSeason, $statsTries, $statsAssists, $statsMotm]);
+        } catch (\Exception $e) {
+            // player_stats table may not exist yet — silently skip
+        }
     }
 
     redirect('/admin/manage-players.php');
@@ -122,6 +141,23 @@ if (in_array($action, ['edit', 'delete'], true) && $editId > 0) {
     $s = $db->prepare('SELECT * FROM players WHERE id = ?');
     $s->execute([$editId]);
     $editPlayer = $s->fetch();
+}
+
+// Load current season stats for the edit form
+$editStats      = ['tries' => 0, 'assists' => 0, 'motm_count' => 0];
+$editStatsSeason = currentSeason();
+if ($action === 'edit' && $editId > 0) {
+    try {
+        $ss = $db->prepare(
+            'SELECT * FROM player_stats WHERE player_id = ? ORDER BY season DESC LIMIT 1'
+        );
+        $ss->execute([$editId]);
+        $row = $ss->fetch();
+        if ($row) {
+            $editStats       = $row;
+            $editStatsSeason = $row['season'];
+        }
+    } catch (\Exception $e) { /* table may not exist yet */ }
 }
 
 $players = [];
@@ -233,6 +269,38 @@ echo renderFlash();
                 <?php endif; ?>
                 <input type="file" id="photo" name="photo" accept=".jpg,.jpeg,.png">
                 <p class="form-hint">JPG or PNG only, max 2 MB. Leave blank to keep current photo.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Season Stats -->
+    <hr style="margin:1.75rem 0;border:none;border-top:1px solid var(--clr-border);">
+    <h3 style="font-size:.8rem;text-transform:uppercase;letter-spacing:.1em;color:var(--clr-text-muted);margin-bottom:1rem;">Season Stats</h3>
+    <div class="grid-2" style="gap:1.25rem;max-width:760px;">
+        <div>
+            <div class="form-group">
+                <label for="stats_season">Season</label>
+                <input type="text" id="stats_season" name="stats_season" maxlength="10"
+                       placeholder="<?= e(currentSeason()) ?>"
+                       value="<?= e($editStatsSeason) ?>">
+                <p class="form-hint">Format: 2025/26. Leave blank to skip stats update.</p>
+            </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;">
+            <div class="form-group">
+                <label for="stats_tries">Tries</label>
+                <input type="number" id="stats_tries" name="stats_tries" min="0" max="99"
+                       value="<?= (int)$editStats['tries'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="stats_assists">Assists</label>
+                <input type="number" id="stats_assists" name="stats_assists" min="0" max="99"
+                       value="<?= (int)$editStats['assists'] ?>">
+            </div>
+            <div class="form-group">
+                <label for="stats_motm">MOTM</label>
+                <input type="number" id="stats_motm" name="stats_motm" min="0" max="99"
+                       value="<?= (int)$editStats['motm_count'] ?>">
             </div>
         </div>
     </div>

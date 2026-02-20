@@ -164,6 +164,48 @@ function uploadPlayerPhoto(array $file): string
     return 'uploads/players/' . $newFilename;
 }
 
+// ── Staff photo upload ─────────────────────────────────────────────────────
+function uploadStaffPhoto(array $file): string
+{
+    if ($file['error'] !== UPLOAD_ERR_OK) {
+        throw new RuntimeException('Upload failed with error code ' . $file['error']);
+    }
+
+    $maxBytes = 2 * 1024 * 1024;
+    if ($file['size'] > $maxBytes) {
+        throw new RuntimeException('File exceeds the 2 MB limit.');
+    }
+
+    $allowedExtensions = ['jpg', 'jpeg', 'png'];
+    $extension         = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+    if (!in_array($extension, $allowedExtensions, true)) {
+        throw new RuntimeException('Only JPG and PNG images are allowed.');
+    }
+
+    $allowedMimes = ['image/jpeg', 'image/png'];
+    $finfo        = new finfo(FILEINFO_MIME_TYPE);
+    $mime         = $finfo->file($file['tmp_name']);
+
+    if (!in_array($mime, $allowedMimes, true)) {
+        throw new RuntimeException('Invalid image type detected.');
+    }
+
+    $newFilename = bin2hex(random_bytes(16)) . '.' . $extension;
+    $uploadDir   = dirname(__DIR__) . '/uploads/staff/';
+    $destination = $uploadDir . $newFilename;
+
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0755, true);
+    }
+
+    if (!move_uploaded_file($file['tmp_name'], $destination)) {
+        throw new RuntimeException('Could not save the uploaded file.');
+    }
+
+    return 'uploads/staff/' . $newFilename;
+}
+
 // ── Club info ──────────────────────────────────────────────────────────────
 function getClubInfo(): array
 {
@@ -193,6 +235,73 @@ function getNextFixture(): ?array
     );
     $stmt->execute();
     return $stmt->fetch() ?: null;
+}
+
+// ── Season helpers ─────────────────────────────────────────────────────────
+/**
+ * Returns the current rugby season string, e.g. '2025/26'.
+ * Season starts in August (month 8).
+ */
+function currentSeason(): string
+{
+    $m = (int)date('n');
+    $y = (int)date('Y');
+    if ($m >= 8) {
+        return $y . '/' . substr((string)($y + 1), -2);
+    }
+    return ($y - 1) . '/' . substr((string)$y, -2);
+}
+
+/**
+ * Top try scorers for a given season.
+ */
+function getTopScorers(string $season, int $limit = 5): array
+{
+    require_once __DIR__ . '/../config/database.php';
+    $db   = getDB();
+    $stmt = $db->prepare(
+        'SELECT p.id, p.name, p.photo_path, p.squad_number, ps.tries, ps.assists, ps.motm_count
+         FROM player_stats ps
+         JOIN players p ON p.id = ps.player_id
+         WHERE ps.season = ? AND ps.tries > 0
+         ORDER BY ps.tries DESC, ps.assists DESC
+         LIMIT ?'
+    );
+    $stmt->execute([$season, $limit]);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Top MOTM winners for a given season.
+ */
+function getTopMotm(string $season, int $limit = 5): array
+{
+    require_once __DIR__ . '/../config/database.php';
+    $db   = getDB();
+    $stmt = $db->prepare(
+        'SELECT p.id, p.name, p.photo_path, p.squad_number, ps.tries, ps.assists, ps.motm_count
+         FROM player_stats ps
+         JOIN players p ON p.id = ps.player_id
+         WHERE ps.season = ? AND ps.motm_count > 0
+         ORDER BY ps.motm_count DESC
+         LIMIT ?'
+    );
+    $stmt->execute([$season, $limit]);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Get stats row for a specific player + season.
+ */
+function getPlayerStats(int $playerId, string $season): array
+{
+    require_once __DIR__ . '/../config/database.php';
+    $db   = getDB();
+    $stmt = $db->prepare(
+        'SELECT * FROM player_stats WHERE player_id = ? AND season = ?'
+    );
+    $stmt->execute([$playerId, $season]);
+    return $stmt->fetch() ?: ['tries' => 0, 'assists' => 0, 'motm_count' => 0];
 }
 
 // ── Featured players (for homepage) ───────────────────────────────────────

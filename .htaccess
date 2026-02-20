@@ -24,11 +24,8 @@ ServerSignature Off
     RewriteRule ^assets/     -  [L]
     RewriteRule ^uploads/    -  [L]
 
-    # Route everything through /public/
-    RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteCond %{REQUEST_FILENAME} !-d
-
     # Clean URLs: /players  →  /public/players.php
+    # Note: no RewriteCond so these fire even for directory paths
     RewriteRule ^/?$               /public/index.php    [L]
     RewriteRule ^players/?$        /public/players.php  [L]
     RewriteRule ^player/?$         /public/player.php   [QSA,L]

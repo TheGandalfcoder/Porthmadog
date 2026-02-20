@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $location     = in_array($_POST['location'] ?? '', ['home', 'away'], true) ? $_POST['location'] : 'home';
     $competition  = cleanString($_POST['competition']    ?? 'League');
     $matchReport  = cleanString($_POST['match_report']   ?? '');
+    $motm         = cleanString($_POST['motm']           ?? '');
     $resultId     = cleanInt($_POST['result_id']         ?? 0);
 
     if ($matchDate === '' || $opponent === '') {
@@ -58,16 +59,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($resultId > 0) {
         $stmt = $db->prepare(
             'UPDATE results SET match_date=?, opponent=?, our_score=?, opponent_score=?,
-             location=?, competition=?, match_report=? WHERE id=?'
+             location=?, competition=?, match_report=?, motm=? WHERE id=?'
         );
-        $stmt->execute([$sqlDate, $opponent, $ourScore, $theirScore, $location, $competition, $matchReport ?: null, $resultId]);
+        $stmt->execute([$sqlDate, $opponent, $ourScore, $theirScore, $location, $competition, $matchReport ?: null, $motm ?: null, $resultId]);
         setFlash('success', 'Result updated.');
     } else {
         $stmt = $db->prepare(
-            'INSERT INTO results (match_date, opponent, our_score, opponent_score, location, competition, match_report)
-             VALUES (?,?,?,?,?,?,?)'
+            'INSERT INTO results (match_date, opponent, our_score, opponent_score, location, competition, match_report, motm)
+             VALUES (?,?,?,?,?,?,?,?)'
         );
-        $stmt->execute([$sqlDate, $opponent, $ourScore, $theirScore, $location, $competition, $matchReport ?: null]);
+        $stmt->execute([$sqlDate, $opponent, $ourScore, $theirScore, $location, $competition, $matchReport ?: null, $motm ?: null]);
         setFlash('success', 'Result added.');
     }
 
@@ -198,6 +199,12 @@ if (!empty($editResult['match_date'])) {
                 <label for="opponent_score">Opponent Score</label>
                 <input type="number" id="opponent_score" name="opponent_score" min="0" max="200"
                        value="<?= (int)($editResult['opponent_score'] ?? 0) ?>">
+            </div>
+            <div class="form-group">
+                <label for="motm">Man of the Match (optional)</label>
+                <input type="text" id="motm" name="motm" maxlength="120"
+                       placeholder="Player name"
+                       value="<?= e($editResult['motm'] ?? '') ?>">
             </div>
             <div class="form-group">
                 <label for="match_report">Match Report (optional)</label>

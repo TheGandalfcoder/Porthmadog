@@ -1,8 +1,10 @@
-# Deny all web access to the setup directory.
-<IfModule mod_authz_core.c>
-    Require all denied
-</IfModule>
-<IfModule !mod_authz_core.c>
-    Order deny,allow
-    Deny from all
-</IfModule>
+# Allow setup/index.php (the one-time web setup page)
+# but deny the CLI-only script from the web.
+<Files "create_admin.php">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Deny from all
+    </IfModule>
+</Files>

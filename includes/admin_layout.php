@@ -22,8 +22,9 @@ function renderAdminHeader(string $pageTitle = 'Dashboard', string $activePage =
     <!-- Sidebar -->
     <aside class="admin-sidebar">
         <div class="admin-sidebar__brand">
-            Porthmadog RFC
-            <span>Admin Panel</span>
+            <strong>Porthmadog RFC</strong>
+            <span>Clwb Rygbi Porthmadog</span>
+            <span class="brand-badge">Admin Panel</span>
         </div>
         <nav class="admin-nav">
             <a href="/admin/dashboard.php" <?= $activePage === 'dashboard' ? 'class="active"' : '' ?>>Dashboard</a>
@@ -32,7 +33,9 @@ function renderAdminHeader(string $pageTitle = 'Dashboard', string $activePage =
             <a href="/admin/manage-players.php"  <?= $activePage === 'players'   ? 'class="active"' : '' ?>>Players</a>
             <a href="/admin/manage-fixtures.php" <?= $activePage === 'fixtures'  ? 'class="active"' : '' ?>>Fixtures</a>
             <a href="/admin/manage-results.php"  <?= $activePage === 'results'   ? 'class="active"' : '' ?>>Results</a>
+            <a href="/admin/manage-staff.php"    <?= $activePage === 'staff'     ? 'class="active"' : '' ?>>Staff &amp; Committee</a>
             <a href="/admin/edit-history.php"    <?= $activePage === 'history'   ? 'class="active"' : '' ?>>Club History</a>
+            <a href="/admin/edit-contact.php"    <?= $activePage === 'contact'   ? 'class="active"' : '' ?>>Contact Info</a>
 
             <div class="nav-section">Site</div>
             <a href="/" target="_blank">View Website ↗</a>

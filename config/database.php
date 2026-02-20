@@ -9,10 +9,11 @@
 
 declare(strict_types=1);
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', '127.0.0.1');
+define('DB_PORT', '8889');              // MAMP default MySQL port
 define('DB_NAME', 'porthmadog_rfc');
-define('DB_USER', 'porthmadog_user');   // use a dedicated DB user, NOT root
-define('DB_PASS', 'CHANGE_ME_STRONG_PASSWORD');
+define('DB_USER', 'root');              // MAMP default username
+define('DB_PASS', 'root');              // MAMP default password
 define('DB_CHARSET', 'utf8mb4');
 
 /**
@@ -30,8 +31,9 @@ function getDB(): PDO
 
     if ($pdo === null) {
         $dsn = sprintf(
-            'mysql:host=%s;dbname=%s;charset=%s',
+            'mysql:host=%s;port=%s;dbname=%s;charset=%s',
             DB_HOST,
+            DB_PORT,
             DB_NAME,
             DB_CHARSET
         );
