@@ -3,15 +3,15 @@
 -- Database Schema
 -- ============================================================
 
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET time_zone = "+00:00";
-SET NAMES utf8mb4;
+-- SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- SET time_zone = "+00:00";
+-- SET NAMES utf8mb4;
 
-CREATE DATABASE IF NOT EXISTS `porthmadog_rfc`
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
+-- CREATE DATABASE IF NOT EXISTS `porthmadog_rfc`
+--     CHARACTER SET utf8mb4
+--     COLLATE utf8mb4_unicode_ci;
 
-USE `porthmadog_rfc`;
+-- USE `porthmadog_rfc`;
 
 -- ------------------------------------------------------------
 -- Table: admin_users

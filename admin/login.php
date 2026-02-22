@@ -58,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="login-box__logo">
             <h1>Porthmadog RFC</h1>
             <p>Clwb Rygbi Porthmadog</p>
-            <span class="login-year">Est. 1975 &bull; 50th Anniversary</span>
+            <span class="login-year">Est. 1976 &bull; 50th Anniversary</span>
         </div>
 
         <?php if ($timeout): ?>

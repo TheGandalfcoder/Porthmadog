@@ -20,6 +20,10 @@ ServerSignature Off
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
+    # Force HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
     # Allow direct access to assets and uploads
     RewriteRule ^assets/     -  [L]
     RewriteRule ^uploads/    -  [L]

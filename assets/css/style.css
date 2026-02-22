@@ -1551,3 +1551,44 @@ textarea { resize: vertical; min-height: 120px; }
     padding-bottom: 1rem;
     margin: 0 .1rem;
 }
+
+/* ── VisualSites credit ──────────────────────────────────────── */
+.footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+.footer-bottom__right {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+.vs-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    color: rgba(255,255,255,.45);
+    text-decoration: none;
+    font-size: .75rem;
+    transition: color .2s;
+}
+.vs-credit:hover { color: rgba(255,255,255,.85); }
+.vs-credit__logo {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    opacity: .6;
+    transition: opacity .2s;
+    border-radius: 3px;
+}
+.vs-credit:hover .vs-credit__logo { opacity: 1; }
+.vs-credit strong { color: rgba(255,255,255,.7); }
+.footer-admin-link {
+    color: rgba(255,255,255,.35);
+    font-size: .75rem;
+    text-decoration: none;
+    transition: color .2s;
+}
+.footer-admin-link:hover { color: rgba(255,255,255,.7); }

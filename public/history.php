@@ -52,8 +52,8 @@ renderHeader('Club History', 'history');
         <h2 class="section-title"><?= t('history.timeline') ?></h2>
         <div class="timeline mb-3">
             <div class="timeline-item">
-                <div class="timeline-item__year">1975</div>
-                <div class="timeline-item__text"><?= t('history.t1975') ?></div>
+                <div class="timeline-item__year">1976</div>
+                <div class="timeline-item__text"><?= t('history.t1976') ?></div>
             </div>
             <div class="timeline-item">
                 <div class="timeline-item__year">1980s</div>

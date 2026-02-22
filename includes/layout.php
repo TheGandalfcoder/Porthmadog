@@ -55,6 +55,49 @@ function renderHeader(string $pageTitle = '', string $activePage = ''): void
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Porthmadog RFC – celebrating 50 years of rugby in North Wales. Fixtures, results, players and club history.">
     <title><?= $title ?></title>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/assets/images/crest.png">
+    <link rel="apple-touch-icon" href="/assets/images/crest.png">
+
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website">
+    <meta property="og:site_name"   content="Porthmadog RFC">
+    <meta property="og:title"       content="<?= $title ?>">
+    <meta property="og:description" content="Porthmadog RFC – celebrating 50 years of rugby in North Wales. Fixtures, results, players and club history.">
+    <meta property="og:url"         content="https://porthmadogrfc.co.uk<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
+    <?php if (crestSrc()): ?>
+    <meta property="og:image"       content="https://porthmadogrfc.co.uk<?= crestSrc() ?>">
+    <?php endif; ?>
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary">
+    <meta name="twitter:title"       content="<?= $title ?>">
+    <meta name="twitter:description" content="Porthmadog RFC – celebrating 50 years of rugby in North Wales. Fixtures, results, players and club history.">
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://porthmadogrfc.co.uk<?= htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/') ?>">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "SportsClub",
+        "name": "Porthmadog RFC",
+        "alternateName": "Clwb Rygbi Porthmadog",
+        "url": "https://porthmadogrfc.co.uk",
+        "description": "Porthmadog Rugby Football Club, founded in 1976. Based at the Traeth ground in Porthmadog, North Wales.",
+        "sport": "Rugby Union",
+        "foundingDate": "1976",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Porthmadog",
+            "addressRegion": "Gwynedd",
+            "addressCountry": "GB"
+        }
+    }
+    </script>
+
     <link rel="stylesheet" href="/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
 </head>
 <body>
@@ -70,7 +113,7 @@ function renderHeader(string $pageTitle = '', string $activePage = ''): void
                     <strong>Porthmadog RFC</strong>
                     <span class="brand-welsh">Clwb Rygbi Porthmadog</span>
                 </div>
-                <span class="brand-year"><?= t('brand.est') ?> 1975</span>
+                <span class="brand-year"><?= t('brand.est') ?> 1976</span>
             </a>
 
             <!-- Desktop nav -->
@@ -152,7 +195,7 @@ function renderFooter(): void
                 <div>
                     <strong>Porthmadog RFC</strong>
                     <span>Clwb Rygbi Porthmadog</span>
-                    <span><?= t('brand.est') ?> 1975 — <?= t('footer.celebrating') ?></span>
+                    <span><?= t('brand.est') ?> 1976 — <?= t('footer.celebrating') ?></span>
                 </div>
             </div>
             <nav class="footer-nav">
@@ -185,7 +228,13 @@ function renderFooter(): void
         </div>
         <div class="footer-bottom">
             <p>&copy; <?= date('Y') ?> Porthmadog RFC / Clwb Rygbi Porthmadog. <?= t('footer.rights') ?></p>
-            <p><a href="/admin/login.php"><?= t('footer.admin') ?></a></p>
+            <div class="footer-bottom__right">
+                <a href="https://visualsites.co.uk" target="_blank" rel="noopener noreferrer" class="vs-credit">
+                    <img src="https://visualsites.co.uk/logo.png" alt="VisualSites" class="vs-credit__logo">
+                    <span>Built by <strong>VisualSites</strong></span>
+                </a>
+                <a href="/admin/login.php" class="footer-admin-link"><?= t('footer.admin') ?></a>
+            </div>
         </div>
     </div>
 </footer>

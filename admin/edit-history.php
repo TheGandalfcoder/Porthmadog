@@ -31,10 +31,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Founded year: cast to int with range check
     $historyContent      = $_POST['history_content']     ?? '';
     $anniversaryMessage  = $_POST['anniversary_message'] ?? '';
-    $foundedYear         = cleanInt($_POST['founded_year'] ?? 1975);
+    $foundedYear         = cleanInt($_POST['founded_year'] ?? 1976);
 
     if ($foundedYear < 1800 || $foundedYear > (int)date('Y')) {
-        $foundedYear = 1975;
+        $foundedYear = 1976;
     }
 
     if ($clubInfo) {
@@ -68,7 +68,7 @@ echo renderFlash();
     <div class="form-group">
         <label for="founded_year">Founded Year</label>
         <input type="number" id="founded_year" name="founded_year" min="1800" max="<?= date('Y') ?>"
-               value="<?= (int)($clubInfo['founded_year'] ?? 1975) ?>" style="max-width:160px;">
+               value="<?= (int)($clubInfo['founded_year'] ?? 1976) ?>" style="max-width:160px;">
     </div>
 
     <div class="form-group">

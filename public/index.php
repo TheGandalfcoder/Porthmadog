@@ -167,7 +167,7 @@ renderHeader('Home', 'home');
 
         <div class="quickstat-card quickstat-card--gold">
             <h3><?= t('home.anniversary') ?></h3>
-            <div class="qs-main"><?= t('brand.est') ?> <?= e((string)($clubInfo['founded_year'] ?? '1975')) ?></div>
+            <div class="qs-main"><?= t('brand.est') ?> <?= e((string)($clubInfo['founded_year'] ?? '1976')) ?></div>
             <div class="qs-sub" style="margin-top:.35rem;"><?= t('home.half_century') ?></div>
             <a href="/public/history.php" class="qs-link"><?= t('home.history_link') ?></a>
         </div>
@@ -181,7 +181,7 @@ renderHeader('Home', 'home');
         <div class="about-grid">
             <div class="about-text">
                 <h2 class="section-title"><?= t('home.about') ?></h2>
-                <p><?= t('home.about_p1') ?> <?= e((string)($clubInfo['founded_year'] ?? '1975')) ?><?= t('home.about_p1b') ?></p>
+                <p><?= t('home.about_p1') ?> <?= e((string)($clubInfo['founded_year'] ?? '1976')) ?><?= t('home.about_p1b') ?></p>
                 <p style="margin-top:.85rem;"><?= t('home.about_p2') ?></p>
                 <a href="/public/history.php" class="btn btn--primary" style="margin-top:1.25rem;"><?= t('home.full_history') ?></a>
             </div>

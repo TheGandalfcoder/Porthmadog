@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-define('DB_HOST', '127.0.0.1');
-define('DB_PORT', '8889');              // MAMP default MySQL port
-define('DB_NAME', 'porthmadog_rfc');
-define('DB_USER', 'root');              // MAMP default username
-define('DB_PASS', 'root');              // MAMP default password
+define('DB_HOST', 'sql311.infinityfree.com');
+define('DB_PORT', '3306');
+define('DB_NAME', 'if0_41206629_db_porthmadog');
+define('DB_USER', 'if0_41206629');
+define('DB_PASS', 'VisualSites123');
 define('DB_CHARSET', 'utf8mb4');
 
 /**
